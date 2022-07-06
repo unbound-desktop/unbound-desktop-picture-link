@@ -6,7 +6,8 @@
    "author": "eternal <eternal.git@gmail.com> (https://github.com/localip)",
    "license": "Unlicensed",
    "scripts": {
-      "build": "swc src -d dist --delete-dir-on-start"
+      "build": "swc src -d dist --delete-dir-on-start",
+      "package": "rm -rf packer && mkdir packer && cp -r manifest.json packer/manifest.json && cp -r dist packer/dist && asar pack packer packed.asar && rm -rf packer"
    },
    "devDependencies": {
       "@swc/cli": "^0.1.57",
