@@ -80,7 +80,7 @@ export default class extends Plugin {
             };
 
             avatar.props.onContextMenu = (e) => openContextMenu(e, () =>
-               <Menu.Menu onClose={closeContextMenu}>
+               <Menu.default onClose={closeContextMenu}>
                   <Menu.MenuItem
                      label='Open Image'
                      id='open-image'
@@ -91,7 +91,7 @@ export default class extends Plugin {
                      id='copy-avatar-url'
                      action={() => clipboard.writeText(image)}
                   />
-               </Menu.Menu>
+               </Menu.default>
             );
          }
 
@@ -126,7 +126,7 @@ export default class extends Plugin {
             };
 
             res.props.onContextMenu = (e) => openContextMenu(e, () =>
-               <Menu.Menu onClose={closeContextMenu}>
+               <Menu.default onClose={closeContextMenu}>
                   <Menu.MenuItem
                      label='Open Image'
                      id='open-image'
@@ -137,7 +137,7 @@ export default class extends Plugin {
                      id='copy-banner-url'
                      action={() => clipboard.writeText(image)}
                   />
-               </Menu.Menu>
+               </Menu.default>
             );
 
             res.props.className = [res.props.className, 'picture-link'].join(' ');
