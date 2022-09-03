@@ -12,15 +12,11 @@ import Settings from './components/Settings';
 const [
    Classes,
    ImageModal,
-   Banner,
-   Banners,
-   Members
+   Banner
 ] = bulk(
    filters.byProps('modal', 'image'),
    filters.byDisplayName('ImageModal', true),
-   filters.byDisplayName('UserBanner', false),
-   filters.byProps('getUserBannerURL'),
-   filters.byProps('getMember')
+   filters.byDisplayName('UserBanner', false)
 );
 
 export default class extends Plugin {
@@ -106,22 +102,14 @@ export default class extends Plugin {
          const [options]: any = args;
          if (options.bannerType !== 1) return;
 
-         const isGuild = options.guildId;
          const handler = findInReactTree(res.props.children, p => p?.onClick);
-         const getter = isGuild ? 'getGuildMemberBannerURL' : 'getUserBannerURL';
-         const image = Banners[getter]({
-            ...options.user,
-            ...(isGuild && Members.getMember(isGuild, options.user.id) || {}),
-            canAnimate: true,
-            guildId: isGuild
-         })?.replace(/(?:\?size=\d{3,4})?$/, '?size=2048')?.replace('.webp', '.png');
 
-         if (!handler?.length && image) {
+         if (handler && options.bannerSrc) {
             res.props.onClick = () => {
                if (this.settings.get('openInBrowser', false)) {
-                  open(image);
+                  open(options.bannerSrc);
                } else {
-                  this.openImage(image, true);
+                  this.openImage(options.bannerSrc, true);
                }
             };
 
@@ -130,12 +118,12 @@ export default class extends Plugin {
                   <Menu.MenuItem
                      label='Open Image'
                      id='open-image'
-                     action={() => this.openImage(image, true)}
+                     action={() => this.openImage(options.bannerSrc, true)}
                   />
                   <Menu.MenuItem
                      label='Copy Banner URL'
                      id='copy-banner-url'
-                     action={() => clipboard.writeText(image)}
+                     action={() => clipboard.writeText(options.bannerSrc)}
                   />
                </Menu.default>
             );

@@ -1,7 +1,7 @@
 {
    "name": "Picture Link",
    "description": "Allows you to click people's profile pictures and banners in their user modal to open them in your browser.",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "authors": [
       {
          "name": "eternal",

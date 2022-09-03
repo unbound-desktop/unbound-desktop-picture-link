@@ -1,3 +1,7 @@
 {
-   "extends": "../../../packages/unbound/tsconfig.json"
+   "extends": "../../../packages/unbound/tsconfig.json",
+   "include": [
+      "../../../packages/unbound/types/**/*",
+      "**/*"
+   ]
 }
