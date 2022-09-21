@@ -1,6 +1,6 @@
 import Plugin from '@entities/plugin';
 
-import { findLazy, findByProps, bulk, filters } from '@webpack';
+import { findLazy, findByDisplayName, findByProps, bulk, filters } from '@webpack';
 import { ContextMenu, Modals } from '@webpack/common';
 import { DOM, findInReactTree } from '@utilities';
 import { Menu, Modal } from '@components/discord';
@@ -11,12 +11,10 @@ import Settings from './components/Settings';
 
 const [
    Classes,
-   ImageModal,
-   Banner
+   ImageModal
 ] = bulk(
    filters.byProps('modal', 'image'),
-   filters.byDisplayName('ImageModal', true),
-   filters.byDisplayName('UserBanner', false)
+   filters.byDisplayName('ImageModal', true)
 );
 
 export default class extends Plugin {
@@ -37,7 +35,6 @@ export default class extends Plugin {
 
    stop() {
       this.style.remove();
-      this.patcher.unpatchAll();
    }
 
    openImage(src: string, banner = false) {
@@ -98,41 +95,46 @@ export default class extends Plugin {
    patchBanners(): void {
       const { openContextMenu, closeContextMenu } = ContextMenu;
 
-      this.patcher.after(Banner, 'default', (_, args, res) => {
-         const [options]: any = args;
-         if (options.bannerType !== 1) return;
+      const Banners = findByDisplayName('UserBanner', { all: true, interop: false });
 
-         const handler = findInReactTree(res.props.children, p => p?.onClick);
+      for (const Banner of Banners) {
+         this.patcher.after(Banner, 'default', (_, args, res) => {
+            const [options]: any = args;
+            if (options.bannerType !== 1) return;
 
-         if (handler && options.bannerSrc) {
-            res.props.onClick = () => {
-               if (this.settings.get('openInBrowser', false)) {
-                  open(options.bannerSrc);
-               } else {
-                  this.openImage(options.bannerSrc, true);
-               }
-            };
+            if (options.bannerSrc && res?.props?.children?.type === 'div') {
+               const payload = res.props.children;
+               const image = options.bannerSrc.replace(/(?:\?size=\d{3,4})?$/, '?size=4096')
 
-            res.props.onContextMenu = (e) => openContextMenu(e, () =>
-               <Menu.default onClose={closeContextMenu}>
-                  <Menu.MenuItem
-                     label='Open Image'
-                     id='open-image'
-                     action={() => this.openImage(options.bannerSrc, true)}
-                  />
-                  <Menu.MenuItem
-                     label='Copy Banner URL'
-                     id='copy-banner-url'
-                     action={() => clipboard.writeText(options.bannerSrc)}
-                  />
-               </Menu.default>
-            );
+               payload.props.onClick = () => {
+                  if (this.settings.get('openInBrowser', false)) {
+                     open(image);
+                  } else {
+                     this.openImage(image, true);
+                  }
+               };
 
-            res.props.className = [res.props.className, 'picture-link'].join(' ');
-         }
+               payload.props.onContextMenu = (e) => openContextMenu(e, () =>
+                  <Menu.default onClose={closeContextMenu}>
+                     <Menu.MenuItem
+                        label='Open Image'
+                        id='open-image'
+                        action={() => this.openImage(image, true)}
+                     />
+                     <Menu.MenuItem
+                        label='Copy Banner URL'
+                        id='copy-banner-url'
+                        action={() => clipboard.writeText(image)}
+                     />
+                  </Menu.default>
+               );
 
-         return res;
-      });
+               payload.props.className = [payload.props.className, 'picture-link'].join(' ');
+            }
+
+            return res;
+         });
+      }
    }
 
    getSettingsPanel(): any {
