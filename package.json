@@ -1,17 +1,17 @@
 {
-   "name": "picture-link",
-   "version": "1.0.0",
-   "description": "Allows you to click people's profile pictures and banners in their user modal to open them in your browser..",
-   "main": "dist/index.js",
-   "author": "eternal <eternal.git@gmail.com> (https://github.com/localip)",
-   "license": "Unlicensed",
-   "scripts": {
-      "build": "swc src -d dist --delete-dir-on-start",
-      "package": "rm -rf packer && mkdir packer && cp -r manifest.json packer/manifest.json && cp -r dist packer/dist && asar pack packer packed.asar && rm -rf packer"
-   },
-   "devDependencies": {
-      "@swc/cli": "^0.1.57",
-      "@swc/core": "^1.2.210",
-      "nodemon": "^2.0.19"
-   }
+	"name": "picture-link",
+	"version": "1.0.0",
+	"description": "Allows you to click people's profile pictures and banners in their user modal to open them in your browser..",
+	"main": "dist/index.js",
+	"author": "Mario <mariovparaschiv@gmail.com> (github.com/localip)",
+	"license": "Unlicensed",
+	"scripts": {
+		"build": "swc src -d dist --delete-dir-on-start",
+		"package": "rm -rf packer && mkdir packer && cp -r manifest.json packer/manifest.json && cp -r dist packer/dist && asar pack packer packed.asar && rm -rf packer"
+	},
+	"devDependencies": {
+		"@swc/cli": "^0.1.57",
+		"@swc/core": "^1.2.210",
+		"nodemon": "^2.0.19"
+	}
 }
