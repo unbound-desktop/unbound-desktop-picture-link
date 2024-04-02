@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Allows you to click people's profile pictures and banners in their user modal to open them in your browser..",
 	"main": "dist/index.js",
-	"author": "Mario <mariovparaschiv@gmail.com> (github.com/localip)",
+	"author": "Mario <me@marioparaschiv.com> (github.com/marioparaschiv)",
 	"license": "Unlicensed",
 	"scripts": {
 		"build": "swc src -d dist --delete-dir-on-start",
